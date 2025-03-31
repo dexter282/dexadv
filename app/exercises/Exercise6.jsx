@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, Button, TextInput, TouchableOpacity, FlatList } from "react-native";
+import { Text, View, StyleSheet, TextInput, FlatList, TouchableOpacity } from "react-native";
 
 export default function Exercise6() {
     const [users, setUsers] = useState([]);
@@ -11,9 +11,7 @@ export default function Exercise6() {
     const handleAddUser = () => {
         if (name && phone && address) {
             setUsers([...users, { id: Date.now(), name, phone, address }]);
-            setName("");
-            setPhone("");
-            setAddress("");
+            resetForm();
         }
     };
 
@@ -26,41 +24,68 @@ export default function Exercise6() {
 
     const handleUpdateUser = () => {
         setUsers(users.map(user => user.id === editingUser.id ? { ...editingUser, name, phone, address } : user));
-        setEditingUser(null);
-        setName("");
-        setPhone("");
-        setAddress("");
+        resetForm();
     };
 
     const handleDeleteUser = (id) => {
         setUsers(users.filter(user => user.id !== id));
     };
 
+    const resetForm = () => {
+        setEditingUser(null);
+        setName("");
+        setPhone("");
+        setAddress("");
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>User Management</Text>
-            <Text style={styles.text}>{editingUser ? "Edit User" : "Add User"}</Text>
+            <Text style={styles.subtitle}>{editingUser ? "Edit User" : "Add New User"}</Text>
             <Text style={styles.count}>Total Users: {users.length}</Text>
-            <TextInput placeholder="Name" style={styles.input} value={name} onChangeText={setName} />
-            <TextInput placeholder="Phone" style={styles.input} value={phone} onChangeText={setPhone} />
-            <TextInput placeholder="Address" style={styles.input} value={address} onChangeText={setAddress} />
-            {editingUser ? (
-                <TouchableOpacity style={styles.button} onPress={handleUpdateUser}>
-                    <Text style={styles.buttonText}>Update User</Text>
-                </TouchableOpacity>
-            ) : (
-                <TouchableOpacity style={styles.button} onPress={handleAddUser}>
-                    <Text style={styles.buttonText}>Add User</Text>
-                </TouchableOpacity>
-            )}
 
-<FlatList
+            {/* Input Fields */}
+            <TextInput 
+                placeholder="Full Name" 
+                style={styles.input} 
+                value={name} 
+                onChangeText={setName} 
+                placeholderTextColor="#A0A0A0"
+            />
+            <TextInput 
+                placeholder="Phone Number" 
+                style={styles.input} 
+                value={phone} 
+                onChangeText={setPhone} 
+                keyboardType="phone-pad"
+                placeholderTextColor="#A0A0A0"
+            />
+            <TextInput 
+                placeholder="Address" 
+                style={styles.input} 
+                value={address} 
+                onChangeText={setAddress} 
+                placeholderTextColor="#A0A0A0"
+            />
+
+            {/* Add / Update Button */}
+            <TouchableOpacity 
+                style={styles.button} 
+                onPress={editingUser ? handleUpdateUser : handleAddUser}
+            >
+                <Text style={styles.buttonText}>{editingUser ? "Update User" : "Add User"}</Text>
+            </TouchableOpacity>
+
+            {/* User List */}
+            <FlatList
                 data={users}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item, index }) => (
-                    <View style={styles.userItem}>
-                        <Text>{index + 1}. {item.name} - {item.phone} - {item.address}</Text>
-                        <View style={styles.buttonContainer}>
+                    <View style={styles.userCard}>
+                        <Text style={styles.userText}>
+                            {index + 1}. {item.name} 📞 {item.phone} 🏠 {item.address}
+                        </Text>
+                        <View style={styles.buttonGroup}>
                             <TouchableOpacity style={styles.editButton} onPress={() => handleEditUser(item)}>
                                 <Text style={styles.buttonText}>Edit</Text>
                             </TouchableOpacity>
@@ -78,69 +103,78 @@ export default function Exercise6() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'black',
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#1E1E1E",
         padding: 20,
     },
     title: {
-        fontSize: 24,
-        marginBottom: 20,
-        fontWeight: 'bold',
-        color: 'white',
+        fontSize: 26,
+        fontWeight: "bold",
+        color: "#FFF",
+        marginBottom: 10,
     },
-    text: {
+    subtitle: {
         fontSize: 18,
-        marginBottom: 15,
-        color: 'white',
+        color: "#A0A0A0",
+        marginBottom: 5,
     },
     count: {
-        fontSize: 15,
-        marginBottom: 10,
-        color: 'white',
+        fontSize: 16,
+        color: "#4A90E2",
+        marginBottom: 15,
     },
     input: {
-        width: '70%',
-        padding: 10,
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: 'pink',
-        borderRadius: 5,
-        backgroundColor: '#fff',
+        width: "90%",
+        padding: 12,
+        borderRadius: 8,
+        backgroundColor: "#2E2E2E",
+        color: "#FFF",
+        fontSize: 16,
+        marginVertical: 8,
     },
     button: {
-        width: '70%',
-        padding: 10,
-        backgroundColor: 'blue',
-        borderRadius: 5,
-        alignItems: 'center',
+        backgroundColor: "#4A90E2",
+        paddingVertical: 12,
+        borderRadius: 8,
+        alignItems: "center",
+        width: "90%",
+        marginVertical: 10,
     },
     buttonText: {
-        color: '#fff',
-        fontSize: 15,
+        color: "#FFF",
+        fontSize: 18,
+        fontWeight: "bold",
     },
-    userItem: {
-        width: '100%',
-        padding: 10,
-        backgroundColor: '#fff',
-        borderColor: 'pink',
-        borderRadius: 5,
-        marginTop: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
+    userCard: {
+        width: "100%",
+        padding: 12,
+        borderRadius: 8,
+        backgroundColor: "#2E2E2E",
+        marginVertical: 5,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
-    buttonContainer: {
-        flexDirection: 'row',
+    userText: {
+        color: "#FFF",
+        fontSize: 16,
+        flex: 1,
+    },
+    buttonGroup: {
+        flexDirection: "row",
     },
     editButton: {
-        backgroundColor: '#28a745',
-        padding: 5,
+        backgroundColor: "#28A745",
+        paddingVertical: 8,
+        paddingHorizontal: 12,
         borderRadius: 5,
         marginRight: 5,
     },
     deleteButton: {
-        backgroundColor: '#dc3545',
-        padding: 5,
+        backgroundColor: "#DC3545",
+        paddingVertical: 8,
+        paddingHorizontal: 12,
         borderRadius: 5,
     },
 });

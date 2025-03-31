@@ -12,7 +12,7 @@ export default function Index() {
       </View>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
         
-        <ThemedText style={styles.nameText}>Steven Earl A. Sanchez</ThemedText>
+        <ThemedText style={styles.nameText}>Dexter Parreno</ThemedText>
       
       </ScrollView> 
     </View>         

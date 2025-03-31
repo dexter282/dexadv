@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Text, View, StyleSheet, Button, TextInput, Image, TouchableOpacity } from "react-native";
-import * as ImagePicker from 'expo-image-picker';
+import { Text, View, StyleSheet, TextInput, Image, TouchableOpacity } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 
 export default function ExerciseHome() {
     const [name, setName] = useState("");
@@ -32,20 +32,31 @@ export default function ExerciseHome() {
         <View style={styles.container}>
             {!submitted ? (
                 <>
-                    <Text style={styles.title}>Register</Text>
-                    <Button title="Pick an image from camera roll" onPress={pickImage} />
+                    <Text style={styles.title}>Create an Account</Text>
+
+                    {/* Image Picker */}
+                    <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+                        <Text style={styles.imagePickerText}>
+                            {image ? "Change Image" : "Select Profile Picture"}
+                        </Text>
+                    </TouchableOpacity>
                     {image && <Image source={{ uri: image }} style={styles.image} />}
+
+                    {/* Input Fields */}
                     <TextInput
-                        placeholder="Name"
+                        placeholder="Full Name"
                         style={styles.input}
                         value={name}
                         onChangeText={setName}
+                        placeholderTextColor="#A0A0A0"
                     />
                     <TextInput
-                        placeholder="Email"
+                        placeholder="Email Address"
                         style={styles.input}
                         value={email}
                         onChangeText={setEmail}
+                        keyboardType="email-address"
+                        placeholderTextColor="#A0A0A0"
                     />
                     <TextInput
                         placeholder="Password"
@@ -53,7 +64,10 @@ export default function ExerciseHome() {
                         secureTextEntry={true}
                         value={password}
                         onChangeText={setPassword}
+                        placeholderTextColor="#A0A0A0"
                     />
+
+                    {/* Register Button */}
                     <TouchableOpacity style={styles.button} onPress={handleRegister}>
                         <Text style={styles.buttonText}>Register</Text>
                     </TouchableOpacity>
@@ -62,8 +76,8 @@ export default function ExerciseHome() {
                 <View style={styles.detailsContainer}>
                     <Text style={styles.title}>User Details</Text>
                     {image && <Image source={{ uri: image }} style={styles.image} />}
-                    <Text style={styles.detailText}>Name: {name}</Text>
-                    <Text style={styles.detailText}>Email: {email}</Text>
+                    <Text style={styles.detailText}>👤 {name}</Text>
+                    <Text style={styles.detailText}>📧 {email}</Text>
                 </View>
             )}
         </View>
@@ -73,48 +87,63 @@ export default function ExerciseHome() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'black',
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#1E1E1E",
         padding: 20,
     },
     title: {
-        fontSize: 24,
+        fontSize: 26,
+        fontWeight: "bold",
+        color: "#FFF",
         marginBottom: 20,
-        fontWeight: 'bold',
-        color: 'white',
+    },
+    imagePicker: {
+        backgroundColor: "#4A90E2",
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        marginBottom: 10,
+    },
+    imagePickerText: {
+        color: "#FFF",
+        fontSize: 16,
+        fontWeight: "bold",
     },
     input: {
-        width: '70%',
-        padding: 10,
-        marginVertical: 10,
-        borderWidth: 1,
-        borderColor: '#262626',
-        borderRadius: 5,
-        backgroundColor: '#fff',
+        width: "90%",
+        padding: 12,
+        borderRadius: 8,
+        backgroundColor: "#2E2E2E",
+        color: "#FFF",
+        fontSize: 16,
+        marginVertical: 8,
     },
     button: {
-        width: '70%',
-        padding: 10,
-        backgroundColor: 'blue',
-        borderRadius: 5,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 15,
-    },
-    image: {
-        width: 200,
-        height: 200,
+        backgroundColor: "#4A90E2",
+        paddingVertical: 12,
+        borderRadius: 8,
+        alignItems: "center",
+        width: "90%",
         marginTop: 10,
     },
+    buttonText: {
+        color: "#FFF",
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+    image: {
+        width: 150,
+        height: 150,
+        borderRadius: 75,
+        marginVertical: 15,
+    },
     detailsContainer: {
-        alignItems: 'center',
+        alignItems: "center",
     },
     detailText: {
         fontSize: 18,
         marginTop: 10,
-        color: '#e6256f',
+        color: "#FFF",
     },
 });

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 
 export default function Stopwatch() {
     const [count, setCount] = useState(0);
@@ -28,39 +28,72 @@ export default function Stopwatch() {
     const milliseconds = count % 100;
 
     return (
-        <View style={{ padding: 190, gap: 5, backgroundColor: 'blue' }}>
-            <Text style={{ fontSize: 100 }}>
-                {hours < 10 ? "0" : ""}{hours}:{minutes < 10 ? "0" : ""}{minutes}:
-                {seconds < 10 ? "0" : ""}{seconds}.{milliseconds < 10 ? "0" : ""}{milliseconds}
+        <View style={styles.container}>
+            {/* Timer Display */}
+            <Text style={styles.timerText}>
+                {hours < 10 ? "0" : ""}{hours}:
+                {minutes < 10 ? "0" : ""}{minutes}:
+                {seconds < 10 ? "0" : ""}{seconds}.
+                {milliseconds < 10 ? "0" : ""}{milliseconds}
             </Text>
-            <TouchableOpacity
-                onPress={() => setStart(!start)}
-                style={{
-                    backgroundColor: 'black',
-                    paddingHorizontal: 20,
-                    paddingVertical: 10,
-                    borderRadius: 5,
-                    marginBottom: 10,
-                }}
-            >
-                <Text style={{ color: 'white', fontSize: 18 }}>
-                    {start ? 'Stop' : 'Start'}
-                </Text>
-            </TouchableOpacity>
 
-            <TouchableOpacity
-                onPress={handleReset}
-                style={{
-                    backgroundColor: 'black',
-                    paddingHorizontal: 20,
-                    paddingVertical: 10,
-                    borderRadius: 5,
-                }}
-            >
-                <Text style={{ color: 'white', fontSize: 18 }}>
-                    Reset
-                </Text>
-            </TouchableOpacity>
+            {/* Buttons */}
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity 
+                    onPress={() => setStart(!start)} 
+                    style={[styles.button, start ? styles.stopButton : styles.startButton]}
+                >
+                    <Text style={styles.buttonText}>{start ? "Stop" : "Start"}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    onPress={handleReset} 
+                    style={[styles.button, styles.resetButton]}
+                >
+                    <Text style={styles.buttonText}>Reset</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#1E1E1E",
+        padding: 20,
+    },
+    timerText: {
+        fontSize: 50,
+        fontWeight: "bold",
+        color: "#FFF",
+        marginBottom: 40,
+    },
+    buttonContainer: {
+        flexDirection: "row",
+        gap: 20,
+    },
+    button: {
+        paddingVertical: 15,
+        paddingHorizontal: 25,
+        borderRadius: 8,
+        alignItems: "center",
+        minWidth: 120,
+    },
+    startButton: {
+        backgroundColor: "#4CAF50",
+    },
+    stopButton: {
+        backgroundColor: "#E53935",
+    },
+    resetButton: {
+        backgroundColor: "#757575",
+    },
+    buttonText: {
+        color: "#FFF",
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+});
